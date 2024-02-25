@@ -23,5 +23,5 @@ class ExerciseRepository:
             quety = select(ExerciseOrm)
             result = await session.execute(quety)
             exercise_models = result.scalars().all()
-            exercise_schemas =[SExercise.model_validate(exercise_models) for exercise_model in exercise_models]
-            return exercise_models
+            exercise_schemas = [SExercise.model_validate(exercise_model) for exercise_model in exercise_models]
+            return exercise_schemas
