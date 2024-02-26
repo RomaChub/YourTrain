@@ -8,7 +8,7 @@ from router import router as exercises_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await delete_tables()
+    #await delete_tables()
     print("Db clear")
     await create_tables()
     print("Db ready")

@@ -2,7 +2,7 @@ from database import new_session, ExerciseOrm
 
 from sqlalchemy import select, delete
 
-from schemas import SExersiceAdd, SExercise, SExerciseId
+from schemas import SExersiceAdd, SExercise
 
 
 class ExerciseRepository:
@@ -39,3 +39,17 @@ class ExerciseRepository:
         async with new_session() as session:
             query = delete(ExerciseOrm).where(ExerciseOrm.id == exercise_id)
             await session.execute(query)
+            await session.commit()
+
+    @classmethod
+    async def update_exercise(cls, exercise_id: int, name: str, description: str):
+        async with new_session() as session:
+            exercise = await session.get(ExerciseOrm, exercise_id)
+            if not exercise:
+                return False
+
+            exercise.name = name
+            exercise.description = description
+            session.add(exercise)
+            await session.commit()
+            return True
