@@ -1,6 +1,6 @@
 from database import new_session, ExerciseOrm
 
-from sqlalchemy import select
+from sqlalchemy import select, delete
 
 from schemas import SExersiceAdd, SExercise, SExerciseId
 
@@ -33,3 +33,9 @@ class ExerciseRepository:
             result = await session.execute(quety)
             exercise_model = result.scalars().all()
             return exercise_model
+
+    @classmethod
+    async def delete_exercise(cls, exercise_id: int):
+        async with new_session() as session:
+            query = delete(ExerciseOrm).where(ExerciseOrm.id == exercise_id)
+            await session.execute(query)
