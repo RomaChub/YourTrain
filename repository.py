@@ -2,7 +2,7 @@ from database import new_session, ExerciseOrm
 
 from sqlalchemy import select
 
-from schemas import SExersiceAdd, SExercise
+from schemas import SExersiceAdd, SExercise, SExerciseId
 
 
 class ExerciseRepository:
@@ -25,3 +25,11 @@ class ExerciseRepository:
             exercise_models = result.scalars().all()
             exercise_schemas = [SExercise.model_validate(exercise_model) for exercise_model in exercise_models]
             return exercise_schemas
+
+    @classmethod
+    async def get_one(cls, exercise_id: int) -> SExercise:
+        async with new_session() as session:
+            quety = select(ExerciseOrm).where(ExerciseOrm.id == exercise_id)
+            result = await session.execute(quety)
+            exercise_model = result.scalars().all()
+            return exercise_model

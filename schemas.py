@@ -15,5 +15,4 @@ class SExercise(SExersiceAdd):
 
 
 class SExerciseId(BaseModel):
-    ok: bool = True
     exercise_id: int
