@@ -1,8 +1,8 @@
-from database import new_session, ExerciseOrm
+from database import new_session, ExerciseOrm, new_session_training,TrainingOrm
 
 from sqlalchemy import select, delete
 
-from schemas import SExersiceAdd, SExercise
+from schemas import SExersiceAdd, SExercise, STrainingAdd, STraining
 
 
 class ExerciseRepository:
@@ -53,3 +53,32 @@ class ExerciseRepository:
             session.add(exercise)
             await session.commit()
             return True
+
+
+class TrainingRepository:
+    @classmethod
+    async def add_training(cls, data: STrainingAdd) -> int:
+        async with new_session_training() as session:
+            training_dict = data.model_dump()
+
+            training = TrainingOrm(**training_dict)
+            session.add(training)
+            await session.flush()
+            await session.commit()
+            return training.id
+
+    @classmethod
+    async def get_all(cls) -> list[STraining]:
+        async with new_session_training() as session:
+            quety = select(TrainingOrm)
+            result = await session.execute(quety)
+            training_models = result.scalars().all()
+            training_schemas = [STraining.model_validate(training_model) for training_model in training_models]
+            return training_schemas
+
+    @classmethod
+    async def delete_training(cls, training_id: int):
+        async with new_session_training() as session:
+            query = delete(TrainingOrm).where(TrainingOrm.id == training_id)
+            await session.execute(query)
+            await session.commit()
