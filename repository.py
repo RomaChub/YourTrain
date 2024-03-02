@@ -1,4 +1,4 @@
-from database import new_session, ExerciseOrm, new_session_training,TrainingOrm
+from database.database import new_session, ExerciseOrm, new_session_training, TrainingOrm
 
 from sqlalchemy import select, delete
 

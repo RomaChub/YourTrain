@@ -7,7 +7,6 @@ from schemas import SExersiceAdd, SExercise, SExerciseId, STrainingAdd, STrainin
 
 router = APIRouter(
     prefix="/YourTrain"
-#    tags=["Exercises"],
 )
 
 
