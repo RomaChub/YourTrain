@@ -10,12 +10,6 @@ engine = create_async_engine(
 )
 new_session = async_sessionmaker(engine, expire_on_commit=False)
 
-engine_Training = create_async_engine(
-    #"sqlite+aiosqlite:///training.db"
-    f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-)
-new_session_training = async_sessionmaker(engine_Training, expire_on_commit=False)
-
 
 class Model(DeclarativeBase):
     pass
@@ -48,10 +42,10 @@ async def delete_tables():
 
 
 async def create_tables_training():
-    async with engine_Training.begin() as conn:
+    async with engine.begin() as conn:
         await conn.run_sync(Model.metadata.create_all)
 
 
 async def delete_tables_training():
-    async with engine_Training.begin() as conn:
+    async with engine.begin() as conn:
         await conn.run_sync(Model.metadata.drop_all)
