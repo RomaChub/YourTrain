@@ -5,7 +5,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from config import DB_PORT, DB_USER, DB_PASS, DB_HOST, DB_NAME
 
 engine = create_async_engine(
-    #"sqlite+aiosqlite:///exercises.db"
     f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
 new_session = async_sessionmaker(engine, expire_on_commit=False)
