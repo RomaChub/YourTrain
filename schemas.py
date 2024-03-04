@@ -30,4 +30,4 @@ class SExerciseId(BaseModel):
 
 
 class STrainingId(BaseModel):
-    training_id:int
+    training_id: int
