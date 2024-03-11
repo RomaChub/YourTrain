@@ -1,14 +1,15 @@
-from sqlalchemy import Column, Integer, String, Table, MetaData
+from sqlalchemy import Column, Integer, String, Boolean, Table, MetaData, ForeignKey, BigInteger
 
 
 metadata = MetaData()
 
-ExerciseOrm = Table(
-    "exercises",
+UserOrm = Table(
+    "users",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("name", String, nullable=False),
-    Column("description", String),
+    Column("username", String, nullable=False),
+    Column("hashed_password", String, nullable=False),
+    Column("is_active", Boolean, default=True),
 )
 
 TrainingOrm = Table(
@@ -16,7 +17,16 @@ TrainingOrm = Table(
     metadata,
     Column("id", Integer, primary_key=True),
     Column("name", String, nullable=False),
-    Column("exercises", String),
+    Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE", onupdate="CASCADE")),
 )
 
 
+ExerciseOrm = Table(
+    "exercises",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("name", String, nullable=False),
+    Column("description", String, nullable=True),
+    Column("training_id", Integer, ForeignKey("training.id", ondelete="CASCADE", onupdate="CASCADE")),
+    Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE", onupdate="CASCADE")),
+)

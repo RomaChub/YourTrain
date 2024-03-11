@@ -20,6 +20,8 @@ class ExerciseOrm(Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     description: Mapped[Optional[str]]
+    training_id: Mapped[int]
+    user_id: Mapped[int]
 
 
 class TrainingOrm(Model):
@@ -27,7 +29,15 @@ class TrainingOrm(Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
-    exercises: Mapped[int]
+    user_id: Mapped[int]
+
+
+class UserOrm(Model):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str]
+    hashed_password: Mapped[str]
 
 
 async def create_tables():
@@ -36,15 +46,5 @@ async def create_tables():
 
 
 async def delete_tables():
-    async with engine.begin() as conn:
-        await conn.run_sync(Model.metadata.drop_all)
-
-
-async def create_tables_training():
-    async with engine.begin() as conn:
-        await conn.run_sync(Model.metadata.create_all)
-
-
-async def delete_tables_training():
     async with engine.begin() as conn:
         await conn.run_sync(Model.metadata.drop_all)
