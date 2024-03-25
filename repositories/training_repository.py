@@ -2,12 +2,13 @@ from database.database import new_session, TrainingOrm
 
 from sqlalchemy import select, delete
 
-from schemas import STrainingAdd, STraining
+from chemas.schemas import STrainingAdd, STraining
 
 
 class TrainingRepository:
     @classmethod
-    async def add_training(cls, data: STrainingAdd) -> int:
+    async def add_training(cls, data: STrainingAdd, username: str) -> int:
+        data.username = username
         async with new_session() as session:
             training_dict = data.model_dump()
 

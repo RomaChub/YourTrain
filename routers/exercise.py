@@ -2,19 +2,24 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from auth.auth_repository import AuthRepository
+from auth.schemas import UserSchema
 from repositories.exercise_repository import ExerciseRepository
-from schemas import SExersiceAdd, SExercise, SExerciseId
+from chemas.schemas import SExersiceAdd, SExercise, SExerciseId
+
 
 router = APIRouter(
-    prefix="/YourTrain"
+    prefix="/YourTrain",
+    tags=['Exersice']
 )
 
 
 @router.post("/exercise")
 async def add_exercise(
         exercise: Annotated[SExersiceAdd, Depends()],
+        user: UserSchema = Depends(AuthRepository.get_current_active_auth_user),
 ) -> SExerciseId:
-    exercise_id = await ExerciseRepository.add_one(exercise)
+    exercise_id = await ExerciseRepository.add_one(exercise,user.username)
     return {"exercise_id": exercise_id}
 
 

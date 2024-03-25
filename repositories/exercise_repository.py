@@ -2,12 +2,13 @@ from database.database import new_session, ExerciseOrm
 
 from sqlalchemy import select, delete
 
-from schemas import SExersiceAdd, SExercise
+from chemas.schemas import SExersiceAdd, SExercise
 
 
 class ExerciseRepository:
     @classmethod
-    async def add_one(cls, data: SExersiceAdd) -> int:
+    async def add_one(cls, data: SExersiceAdd, username: str) -> int:
+        data.username = username
         async with new_session() as session:
             exercise_dict = data.model_dump()
 

@@ -2,19 +2,23 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from auth.auth_repository import AuthRepository
+from auth.schemas import UserSchema
 from repositories.training_repository import TrainingRepository
-from schemas import STrainingAdd, STraining, STrainingId
+from chemas.schemas import STrainingAdd, STraining, STrainingId
 
 router = APIRouter(
-    prefix="/YourTrain"
+    prefix="/YourTrain",
+    tags=['Training']
 )
 
 
 @router.post("/training")
 async def add_training(
         training: Annotated[STrainingAdd, Depends()],
+        user: UserSchema = Depends(AuthRepository.get_current_active_auth_user),
 ) -> STrainingId:
-    training_id = await TrainingRepository.add_training(training)
+    training_id = await TrainingRepository.add_training(training, user.username)
     return {"training_id": training_id}
 
 

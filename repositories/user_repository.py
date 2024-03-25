@@ -1,8 +1,8 @@
 from database.database import new_session, UserOrm
 
-from sqlalchemy import select, delete
+from sqlalchemy import select
 
-from schemas import SUserAdd, SUser, SUserId
+from chemas.schemas import SUserAdd, SUser
 
 
 class UserRepository:
