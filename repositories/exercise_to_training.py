@@ -2,12 +2,12 @@ from database.database import new_session, ConnectionExerciseWithTrainingOrm
 
 from sqlalchemy import select
 
-from chemas.schemas import SExerciseId, STrainingId, SPairExerciseTraining
+from chemas.SPairExerciseTraining import SPairExerciseTraining
 
 
 class ExerciseToTraining:
     @classmethod
-    async def add_one(cls, exercise_id: SExerciseId, training_id: STrainingId) -> int:
+    async def add_one(cls, exercise_id, training_id) -> int:
         async with (new_session() as session):
             exercise_pair = ConnectionExerciseWithTrainingOrm(exercise_id=exercise_id, training_id=training_id)
             session.add(exercise_pair)

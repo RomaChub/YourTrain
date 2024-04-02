@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from repositories.exercise_to_training import ExerciseToTraining
-from chemas.schemas import SPairExerciseTrainingId, SPairExerciseTraining
+from chemas.SPairExerciseTraining import SPairExerciseTrainingId, SPairExerciseTraining
 
 router = APIRouter(
     prefix="/YourTrain",
@@ -9,13 +9,13 @@ router = APIRouter(
 )
 
 
-@router.post("/pair")
+@router.put("/pair")
 async def add_pair(
         exercise_id: int,
         training_id: int
 ) -> SPairExerciseTrainingId:
     pair_id = await ExerciseToTraining.add_one(exercise_id, training_id)
-    return {"pair_id": pair_id}
+    return pair_id
 
 @router.get("/pair")
 async def get_pairs() -> list[SPairExerciseTraining]:

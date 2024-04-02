@@ -1,4 +1,3 @@
-from jwt.exceptions import InvalidTokenError
 from fastapi import (
     Depends,
     Form,
@@ -6,13 +5,13 @@ from fastapi import (
     status,
 )
 from fastapi.security import OAuth2PasswordBearer
+from jwt.exceptions import InvalidTokenError
 from sqlalchemy import select
-from sqlalchemy.orm import Mapped
 
 from auth import utils as auth_utils
-from auth.schemas import UserSchema
-from database.database import new_session
 from database.database import UserOrm
+from database.database import new_session
+from chemas.SUser import SUser
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/jwt/login",
@@ -37,7 +36,7 @@ class AuthRepository:
             if user.username == username:
                 if auth_utils.validate_password(password=password, hashed_password=user.hashed_password):
                     if user.is_active:
-                        return UserSchema(**user.__dict__)
+                        return SUser(**user.__dict__)
                     else:
                         raise HTTPException(
                             status_code=status.HTTP_403_FORBIDDEN,
@@ -45,6 +44,7 @@ class AuthRepository:
                         )
         raise unauthed_exc
 
+    @staticmethod
     async def get_current_token_payload(token: str = Depends(oauth2_scheme)) -> dict:
         try:
             payload = auth_utils.decode_jwt(
@@ -58,24 +58,27 @@ class AuthRepository:
             )
         return payload
 
-    async def get_current_auth_user(payload: dict = Depends(get_current_token_payload)) -> UserSchema:
-        username: str | None = payload.get("username")
-        async with new_session() as session:
-            quety = select(UserOrm).where(UserOrm.username == username)
-            result = await session.execute(quety)
-            user = result.scalars().all()
-            for u in user:
-                if username == u.username:
-                    return u
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="token invalid",
-                )
+    @staticmethod
+    async def get_current_auth_user(payload: dict = Depends(get_current_token_payload)) -> SUser:
+        payload_data = await payload
+        username: str | None = payload_data.get("username")
+        if username is not None:
+            async with new_session() as session:
+                query = select(UserOrm).where(UserOrm.username == username)
+                result = await session.execute(query)
+                user = result.scalar()
+                if user:
+                    return user
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token invalid or user not found",
+        )
 
     @classmethod
-    async def get_current_active_auth_user(cls, user: UserSchema = Depends(get_current_auth_user)):
-        if user.is_active != 0:
-            return user
+    async def get_current_active_auth_user(cls, user: SUser = Depends(get_current_auth_user)):
+        user_object = await user
+        if user_object.is_active:
+            return user_object
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="user inactive",

@@ -1,6 +1,9 @@
-from typing import Optional
+from typing import Optional, Text, Dict
+
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.dialects.postgresql import JSON
 from config import DB_PORT, DB_USER, DB_PASS, DB_HOST, DB_NAME
 
 engine = create_async_engine(
@@ -16,10 +19,12 @@ class Model(DeclarativeBase):
 class ExerciseOrm(Model):
     __tablename__ = "exercises"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
-    description: Mapped[Optional[str]]
-    username: Mapped[str]
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    description = Column(String, nullable=True)
+    user_id = Column(Integer)
+    params = Column(JSON)
+    img = Column(String)
 
 
 class TrainingOrm(Model):
@@ -28,7 +33,7 @@ class TrainingOrm(Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     description: Mapped[Optional[str]]
-    username: Mapped[str]
+    user_id: Mapped[int]
 
 
 class UserOrm(Model):
@@ -36,7 +41,7 @@ class UserOrm(Model):
 
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     username: Mapped[str]
-    hashed_password: Mapped[str]
+    hashed_password: Mapped[bytes]
     is_active: Mapped[bool]
 
 
@@ -46,6 +51,7 @@ class ConnectionExerciseWithTrainingOrm(Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     training_id: Mapped[int]
     exercise_id: Mapped[int]
+    user_id: Mapped[int]
 
 
 async def create_tables():

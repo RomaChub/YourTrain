@@ -1,23 +1,13 @@
 from fastapi import FastAPI
 
-from contextlib import asynccontextmanager
-from database.database import create_tables, delete_tables
-from routers.exercise import router as exercises_router
-from routers.training import router as training_router
-from routers.user import router as user_router
-from routers.pairs import router as pairs_router
-from auth.core.config import settings
 from auth.auth_router import router as jwt_router
+from auth.core.config import settings
+from routers.exercise_router import router as exercises_router
+from routers.pairs_router import router as pairs_router
+from routers.training_router import router as training_router
+from routers.user_router import router as user_router
 
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    print("Db ready")
-    yield
-    print("Off")
-
-
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 app.include_router(exercises_router)
 app.include_router(training_router)
 app.include_router(user_router)

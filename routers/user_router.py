@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from repositories.user_repository import UserRepository
-from chemas.schemas import SUserAdd, SUserId, SUser
+from chemas.SUser import SUserAdd, SUserId, SUser, SUserW
 
 router = APIRouter(
     prefix="/yourtrain",
@@ -20,6 +20,6 @@ async def add_user(
 
 
 @router.get("/user")
-async def get_users() -> list[SUser]:
+async def get_users() -> list[SUserW]:
     users = await UserRepository.get_all()
     return users

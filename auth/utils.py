@@ -54,6 +54,9 @@ def hash_password(
 
 def validate_password(
         password: str,
-        hashed_password: str,
+        hashed_password: bytes,
 ) -> bool:
-    return True if (password == hashed_password) else False
+    return bcrypt.checkpw(
+        password=password.encode(),
+        hashed_password=hashed_password,
+    )

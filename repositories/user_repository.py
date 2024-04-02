@@ -1,13 +1,15 @@
+from auth.utils import hash_password
 from database.database import new_session, UserOrm
 
 from sqlalchemy import select
 
-from chemas.schemas import SUserAdd, SUser
+from chemas.SUser import SUserAdd, SUser, SUserW
 
 
 class UserRepository:
     @classmethod
     async def add_user(cls, data: SUserAdd) -> int:
+        data.hashed_password = hash_password(data.hashed_password)
         async with new_session() as session:
             user_dict = data.model_dump()
 
@@ -18,12 +20,12 @@ class UserRepository:
             return user.id
 
     @classmethod
-    async def get_all(cls) -> list[SUser]:
+    async def get_all(cls) -> list[SUserW]:
         async with new_session() as session:
             quety = select(UserOrm)
             result = await session.execute(quety)
-            user_models = result.scalars().all()
-            user_schemas = [SUser.model_validate(user_model) for user_model in user_models]
+            user_models = result.scalars()
+            user_schemas = [SUserW.model_validate(user_model) for user_model in user_models]
             return user_schemas
 
     @classmethod

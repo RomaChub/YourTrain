@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from auth import utils as auth_utils
 from auth.auth_repository import AuthRepository
-from auth.schemas import UserSchema
+from chemas import SUser
 
 
 class TokenInfo(BaseModel):
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/jwt", tags=["JWT"])
 
 @router.post("/login", response_model=TokenInfo)
 def auth_user_issue_jwt(
-        user: UserSchema = Depends(AuthRepository.validate_auth_user),
+        user: SUser = Depends(AuthRepository.validate_auth_user),
 ):
     jwt_payload = {
         # subject
@@ -36,7 +36,7 @@ def auth_user_issue_jwt(
 @router.get("/user/me")
 async def auth_user_check_self_info(
         payload: dict = Depends(AuthRepository.get_current_token_payload),
-        user: UserSchema = Depends(AuthRepository.get_current_active_auth_user),
+        user: SUser = Depends(AuthRepository.get_current_active_auth_user),
 ):
     iat = payload.get("iat")
     return {

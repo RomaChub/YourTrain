@@ -1,14 +1,16 @@
+import json
+
 from database.database import new_session, ExerciseOrm
 
 from sqlalchemy import select, delete
 
-from chemas.schemas import SExersiceAdd, SExercise
+from chemas.SExercise import SExersiceAdd, SExercise
 
 
 class ExerciseRepository:
     @classmethod
-    async def add_one(cls, data: SExersiceAdd, username: str) -> int:
-        data.username = username
+    async def add_one(cls, data: SExersiceAdd, user_id: int) -> int:
+        data.user_id = user_id
         async with new_session() as session:
             exercise_dict = data.model_dump()
 
@@ -19,7 +21,7 @@ class ExerciseRepository:
             return exercise.id
 
     @classmethod
-    async def get_all(cls) -> list[SExercise]:
+    async def get_all(cls) -> list:
         async with new_session() as session:
             quety = select(ExerciseOrm)
             result = await session.execute(quety)
@@ -32,7 +34,7 @@ class ExerciseRepository:
         async with new_session() as session:
             quety = select(ExerciseOrm).where(ExerciseOrm.id == exercise_id)
             result = await session.execute(quety)
-            exercise_model = result.scalars().all()
+            exercise_model = result.scalars().one()
             return exercise_model
 
     @classmethod
@@ -43,14 +45,15 @@ class ExerciseRepository:
             await session.commit()
 
     @classmethod
-    async def update_exercise(cls, exercise_id: int, name: str, description: str):
+    async def update_exercise(cls, ex_id: int, ex: SExersiceAdd):
         async with new_session() as session:
-            exercise = await session.get(ExerciseOrm, exercise_id)
+            exercise = await session.get(ExerciseOrm, ex_id)
             if not exercise:
                 return False
-
-            exercise.name = name
-            exercise.description = description
+            exercise.name = ex.name
+            exercise.description = ex.description
+            exercise.img = ex.img
+            exercise.params = ex.params
             session.add(exercise)
             await session.commit()
             return True
