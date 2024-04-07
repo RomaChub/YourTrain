@@ -23,7 +23,7 @@ async def add_training(
 
 
 @router.get("/training/{training_id}")
-async def get_one_training(training_id: int) -> STraining:
+async def get_one_training(training_id: int):
     training_one = await TrainingRepository.get_one(training_id)
     return training_one
 
@@ -41,6 +41,6 @@ async def get_training() -> list[STraining]:
 
 
 @router.put("/training/{training_id}")
-async def update_training(training_id: int, name: str, exercises: int) -> STrainingId:
-    success = await TrainingRepository.update_training(training_id, name, exercises)
-    return training_id
+async def update_training(training_id: int, name: Annotated[STrainingAdd, Depends()]) -> STrainingId:
+    success = await TrainingRepository.update_training(training_id, name)
+    return {"id": training_id}

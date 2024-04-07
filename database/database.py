@@ -1,6 +1,6 @@
-from typing import Optional, Text, Dict
+from typing import Optional
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, TIMESTAMP
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSON
@@ -27,6 +27,16 @@ class ExerciseOrm(Model):
     img = Column(String)
 
 
+class CompleteTrainingOrm(Model):
+    __tablename__ = "complete_trainings"
+    
+    id = Column(Integer, primary_key=True)
+    training_id = Column(Integer)
+    user_id = Column(Integer)
+    time_start = Column(TIMESTAMP, nullable=True)
+    time_end = Column(TIMESTAMP, nullable=True)
+
+
 class TrainingOrm(Model):
     __tablename__ = "training"
 
@@ -43,6 +53,7 @@ class UserOrm(Model):
     username: Mapped[str]
     hashed_password: Mapped[bytes]
     is_active: Mapped[bool]
+    training_start_flag: Mapped[Optional[bool]]
 
 
 class ConnectionExerciseWithTrainingOrm(Model):

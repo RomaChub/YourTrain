@@ -36,14 +36,15 @@ class TrainingRepository:
             return training_model
 
     @classmethod
-    async def update_training(cls, training_id: int, name: str):
+    async def update_training(cls, training_id: int, name: STrainingAdd):
         async with new_session() as session:
             training = await session.get(TrainingOrm, training_id)
             if not training:
                 return False
 
-            training.name = name
-            training.add(training)
+            training.name = name.name
+            training.description = name.description
+            session.add(training)
             await session.commit()
             return True
 

@@ -5,6 +5,7 @@ class SUserAdd(BaseModel):
     username: str
     hashed_password: str
     is_active: bool
+    training_start_flag:bool
 
 
 class SUser(SUserAdd):

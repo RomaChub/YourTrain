@@ -8,9 +8,9 @@ class SPairExerciseTrainingAdd(BaseModel):
 
 class SPairExerciseTraining(SPairExerciseTrainingAdd):
     id: int
-
+    user_id: int
     model_config = ConfigDict(from_attributes=True)
 
 
 class SPairExerciseTrainingId(BaseModel):
-    pair_id: int
+    id: int

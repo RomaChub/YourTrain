@@ -7,16 +7,16 @@ from chemas.SPairExerciseTraining import SPairExerciseTraining
 
 class ExerciseToTraining:
     @classmethod
-    async def add_one(cls, exercise_id, training_id) -> int:
-        async with (new_session() as session):
-            exercise_pair = ConnectionExerciseWithTrainingOrm(exercise_id=exercise_id, training_id=training_id)
+    async def add_one(cls, exercise_id, training_id, user_id):
+        async with new_session() as session:
+            exercise_pair = ConnectionExerciseWithTrainingOrm(exercise_id=exercise_id, training_id=training_id, user_id=user_id)
             session.add(exercise_pair)
             await session.flush()
             await session.commit()
             return exercise_pair.id
 
     @classmethod
-    async def get_all(cls) -> list[SPairExerciseTraining]:
+    async def get_all(cls) -> list:
         async with new_session() as session:
             quety = select(ConnectionExerciseWithTrainingOrm)
             result = await session.execute(quety)
