@@ -3,7 +3,7 @@ from typing import Optional, Dict, Text, Any
 from pydantic import BaseModel, ConfigDict
 
 
-class SExersiceAdd(BaseModel):
+class SExerciseAdd(BaseModel):
     name: str
     description: Optional[str] = None
     user_id: Optional[int] = None
@@ -11,7 +11,7 @@ class SExersiceAdd(BaseModel):
     params: Optional[Dict[str, Any]] = None
 
 
-class SExercise(SExersiceAdd):
+class SExercise(SExerciseAdd):
     id: int
 
     model_config = ConfigDict(from_attributes=True)

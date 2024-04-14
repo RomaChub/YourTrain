@@ -1,7 +1,6 @@
 from datetime import datetime
-from sqlite3 import Timestamp
-from sqlalchemy import update
-from sqlalchemy import select
+from sqlalchemy import update, select
+from sqlalchemy.orm import Session
 
 from chemas.SCompleteTraining import SCompleteTraining
 from database.database import new_session, CompleteTrainingOrm, UserOrm
@@ -16,14 +15,9 @@ class CompleteTrainingsRepository:
                                                      training_id=training_id)
             session.add(completed_training)
             await session.commit()
-            user_model = select(UserOrm).where(UserOrm.id == user_id)
-            result = await session.execute(user_model)
-            user = result.scalars().all()
-            user = user.pop(0)
-            user.training_start_flag = True
-            session.add(user)
-            await session.flush()
-            await session.commit()
+
+            await cls._update_user_training_start_flag(session, user_id, True)
+
             return completed_training.id
 
     @classmethod
@@ -35,19 +29,23 @@ class CompleteTrainingsRepository:
                 .values(time_end=end_time)
             )
             await session.commit()
-            user_model = select(UserOrm).where(UserOrm.id == user_id)
-            result = await session.execute(user_model)
-            user = result.scalars().all()
-            user = user.pop(0)
-            user.training_start_flag = False
-            session.add(user)
-            await session.flush()
-            await session.commit()
+
+            await cls._update_user_training_start_flag(session, user_id, False)
 
     @classmethod
-    async def get_all_completed_trainings(cls) -> list:
+    async def get_all_completed_trainings(cls) -> list[SCompleteTraining]:
         async with new_session() as session:
             query = select(CompleteTrainingOrm)
             result = await session.execute(query)
             models = result.scalars().all()
             return models
+
+    @classmethod
+    async def _update_user_training_start_flag(cls, session: Session, user_id: int, flag_value: bool):
+        user_model = select(UserOrm).where(UserOrm.id == user_id)
+        result = await session.execute(user_model)
+        user = result.scalars().first()
+        if user:
+            user.training_start_flag = flag_value
+            session.add(user)
+            await session.commit()

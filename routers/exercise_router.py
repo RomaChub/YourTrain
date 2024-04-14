@@ -1,47 +1,58 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from auth.auth_repository import AuthRepository
 from chemas import SUser
 from repositories.exercise_repository import ExerciseRepository
-from chemas.SExercise import SExersiceAdd, SExercise, SExerciseId
+from chemas.SExercise import SExerciseAdd, SExercise, SExerciseId
 
 
 router = APIRouter(
-    prefix="/YourTrain",
-    tags=['Exersice']
+    prefix="/your_train",
+    tags=['Exercise']
 )
 
 
-@router.post("/exercise")
+@router.post("/exercise", response_model=SExerciseId)
 async def add_exercise(
-        exercise: Annotated[SExersiceAdd, Depends()],
+        exercise: Annotated[SExerciseAdd, Depends()],
         user: SUser = Depends(AuthRepository.get_current_active_auth_user),
 ) -> SExerciseId:
-    exercise_id = await ExerciseRepository.add_one(exercise, user.id)
-    return {"id": exercise_id}
+    try:
+        exercise_id = await ExerciseRepository.add_one(exercise, user.id)
+        return {"id": exercise_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/exercise/{exercise_id}")
+@router.get("/exercise/{exercise_id}", response_model=SExercise)
 async def get_one_exercise(exercise_id: int) -> SExercise:
     exercise_one = await ExerciseRepository.get_one(exercise_id)
+    if exercise_one is None:
+        raise HTTPException(status_code=404, detail="Exercise not found")
     return exercise_one
 
 
-@router.delete("/exercise/{exercise_id}")
+@router.delete("/exercise/{exercise_id}", response_model=SExerciseId)
 async def delete_exercise(exercise_id: int) -> SExerciseId:
-    await ExerciseRepository.delete_exercise(exercise_id)
-    return exercise_id
+    try:
+        await ExerciseRepository.delete_exercise(exercise_id)
+        return {"id": exercise_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/exercise")
+@router.get("/exercise", response_model=list[SExercise])
 async def get_exercises() -> list[SExercise]:
     exercises = await ExerciseRepository.get_all()
     return exercises
 
 
-@router.put("/exercise/{exercise_id}")
-async def update_exercise(exercise_id: int, ex: Annotated[SExersiceAdd, Depends()]) -> SExerciseId:
-    success = await ExerciseRepository.update_exercise(exercise_id, ex)
-    return {"id": exercise_id}
+@router.put("/exercise/{exercise_id}", response_model=SExerciseId)
+async def update_exercise(exercise_id: int, ex: Annotated[SExerciseAdd, Depends()]) -> SExerciseId:
+    try:
+        success = await ExerciseRepository.update_exercise(exercise_id, ex)
+        return {"id": exercise_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

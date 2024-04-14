@@ -6,7 +6,7 @@ from repositories.user_repository import UserRepository
 from chemas.SUser import SUserAdd, SUserId, SUser, SUserW
 
 router = APIRouter(
-    prefix="/yourtrain",
+    prefix="/your_train",
     tags=['User']
 )
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from auth.auth_repository import AuthRepository
 from chemas.SUser import SUser
@@ -6,22 +6,28 @@ from repositories.exercise_to_training import ExerciseToTraining
 from chemas.SPairExerciseTraining import SPairExerciseTrainingId, SPairExerciseTraining
 
 router = APIRouter(
-    prefix="/YourTrain",
+    prefix="/your_train",
     tags=['ExerciseToTraining']
 )
 
 
-@router.post("/pair")
+@router.post("/pair", response_model=SPairExerciseTrainingId)
 async def add_pair(
         exercise_id: int,
         training_id: int,
         user: SUser = Depends(AuthRepository.get_current_active_auth_user),
 ) -> SPairExerciseTrainingId:
-    pair_id = await ExerciseToTraining.add_one(exercise_id, training_id, user.id)
-    return {"id": pair_id}
+    try:
+        pair_id = await ExerciseToTraining.add_one(exercise_id, training_id, user.id)
+        return {"id": pair_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/pair")
-async def get_pairs() -> list:
-    pairs = await ExerciseToTraining.get_all()
-    return pairs
+@router.get("/pair", response_model=list[SPairExerciseTraining])
+async def get_pairs() -> list[SPairExerciseTraining]:
+    try:
+        pairs = await ExerciseToTraining.get_all()
+        return pairs
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

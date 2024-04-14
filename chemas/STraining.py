@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
+from chemas.SExercise import SExercise
+
 
 class STrainingAdd(BaseModel):
     name: str
@@ -17,3 +19,8 @@ class STraining(STrainingAdd):
 
 class STrainingId(BaseModel):
     id: int
+
+
+class SFullTraining(STraining):
+    all_exercises_id: Optional[list[int]] = None
+    all_exercises: Optional[list[SExercise]] = None
