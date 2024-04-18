@@ -10,17 +10,19 @@ from chemas.SUser import SUser
 from repositories.complete_trainings_repository import CompleteTrainingsRepository
 from chemas.SCompleteTraining import SCompleteTraining
 
-
 router = APIRouter(
     prefix="/your_train",
     tags=['CompleteTrainings']
 )
 
+
 class TrainingStartResponse(BaseModel):
     result_id: int
 
+
 class TrainingEndResponse(BaseModel):
     success: bool
+
 
 @router.post("/complete-training/start/", response_model=TrainingStartResponse)
 async def start_training(

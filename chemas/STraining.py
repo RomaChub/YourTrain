@@ -1,13 +1,13 @@
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from chemas.SExercise import SExercise
 
 
 class STrainingAdd(BaseModel):
-    name: str
-    description: Optional[str] = None
+    name: str = Field('name')
+    description: Optional[str] = Field('Some description about the training')
     user_id: Optional[int] = None
 
 

@@ -53,7 +53,7 @@ async def delete_training(training_id: int) -> STrainingId:
         await TrainingRepository.delete_training(training_id)
         return {"id": training_id}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.get("/training", response_model=List[STraining])

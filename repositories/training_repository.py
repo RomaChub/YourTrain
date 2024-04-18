@@ -37,7 +37,7 @@ class TrainingRepository:
             return training_model.pop()
 
     @classmethod
-    async def get_training(cls, training_id: int) -> SFullTraining:
+    async def get_training(cls, training_id: int) -> SFullTraining:  # сделать один запрос
         async with new_session() as session:
             training_query = select(TrainingOrm).where(TrainingOrm.id == training_id)
             training_result = await session.execute(training_query)
@@ -58,14 +58,14 @@ class TrainingRepository:
             all_exercises = exercises_result.scalars().all()
 
             training_schema = SFullTraining.model_validate(training)
-            training_schema.all_exercises_id = exercises_ids
+            training_schema.all_exercises_id = exercises_ids  # убрать
             training_schema.all_exercises = all_exercises
             return training_schema
 
     @classmethod
     async def update_training(cls, training_id: int, name: STrainingAdd):
         async with new_session() as session:
-            training = await session.get(TrainingOrm, training_id)
+            training = await session.get(TrainingOrm, training_id)  # query
             if not training:
                 return False
 
