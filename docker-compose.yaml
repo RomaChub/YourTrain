@@ -6,7 +6,7 @@ services:
     build: ./
     depends_on:
       - db
-    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0 --port 8000'
+    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; uvicorn main:app --host 0.0.0.0 --port 8000'
     volumes:
       - ./app:/src/app
     ports:
