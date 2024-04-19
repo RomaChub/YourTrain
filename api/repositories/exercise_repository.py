@@ -1,10 +1,8 @@
-import json
-
-from database.database import new_session, ExerciseOrm
+from api.database.database import new_session, ExerciseOrm
 
 from sqlalchemy import select, delete
 
-from chemas.SExercise import SExerciseAdd, SExercise
+from api.chemas.SExercise import SExerciseAdd, SExercise
 
 
 class ExerciseRepository:

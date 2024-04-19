@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, TIMESTAMP
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSON
-from config import DB_PORT, DB_USER, DB_PASS, DB_HOST, DB_NAME
+from api.config import DB_PORT, DB_USER, DB_PASS, DB_HOST, DB_NAME
 
 engine = create_async_engine(
     f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"

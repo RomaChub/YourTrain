@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import bcrypt
 import jwt
-from auth.core.config import settings
+from api.auth.core.config import settings
 
 
 def encode_jwt(payload: dict, expire_timedelta: timedelta | None = None) -> str:

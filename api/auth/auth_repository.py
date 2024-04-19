@@ -8,10 +8,10 @@ from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
 from sqlalchemy import select
 
-from auth import utils as auth_utils
-from database.database import UserOrm
-from database.database import new_session
-from chemas.SUser import SUser
+from api.auth import utils as auth_utils
+from api.database.database import UserOrm
+from api.database.database import new_session
+from api.chemas.SUser import SUser
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/jwt/login",

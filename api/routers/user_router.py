@@ -2,8 +2,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from repositories.user_repository import UserRepository
-from chemas.SUser import SUserAdd, SUserId, SUserW
+from api.repositories.user_repository import UserRepository
+from api.chemas.SUser import SUserAdd, SUserId, SUserW
 
 router = APIRouter(
     prefix="/your_train",

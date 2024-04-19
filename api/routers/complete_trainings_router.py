@@ -5,10 +5,10 @@ from fastapi import APIRouter, HTTPException, Depends
 
 from pydantic import BaseModel
 
-from auth.auth_repository import AuthRepository
-from chemas.SUser import SUser
-from repositories.complete_trainings_repository import CompleteTrainingsRepository
-from chemas.SCompleteTraining import SCompleteTraining
+from api.auth.auth_repository import AuthRepository
+from api.chemas.SUser import SUser
+from api.repositories.complete_trainings_repository import CompleteTrainingsRepository
+from api.chemas.SCompleteTraining import SCompleteTraining
 
 router = APIRouter(
     prefix="/your_train",

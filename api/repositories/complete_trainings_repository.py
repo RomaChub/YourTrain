@@ -2,8 +2,8 @@ from datetime import datetime
 from sqlalchemy import update, select
 from sqlalchemy.orm import Session
 
-from chemas.SCompleteTraining import SCompleteTraining
-from database.database import new_session, CompleteTrainingOrm, UserOrm
+from api.chemas.SCompleteTraining import SCompleteTraining
+from api.database.database import new_session, CompleteTrainingOrm, UserOrm
 
 
 class CompleteTrainingsRepository:

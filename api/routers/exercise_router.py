@@ -2,10 +2,10 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from auth.auth_repository import AuthRepository
-from chemas import SUser
-from repositories.exercise_repository import ExerciseRepository
-from chemas.SExercise import SExerciseAdd, SExercise, SExerciseId
+from api.auth.auth_repository import AuthRepository
+from api.chemas import SUser
+from api.repositories.exercise_repository import ExerciseRepository
+from api.chemas.SExercise import SExerciseAdd, SExercise, SExerciseId
 
 
 router = APIRouter(

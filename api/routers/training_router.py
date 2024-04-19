@@ -2,10 +2,10 @@ from typing import Annotated, List
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from auth.auth_repository import AuthRepository
-from chemas import SUser
-from repositories.training_repository import TrainingRepository
-from chemas.STraining import STrainingAdd, STraining, STrainingId, SFullTraining
+from api.auth.auth_repository import AuthRepository
+from api.chemas import SUser
+from api.repositories.training_repository import TrainingRepository
+from api.chemas.STraining import STrainingAdd, STraining, STrainingId, SFullTraining
 
 router = APIRouter(
     prefix="/your_train",

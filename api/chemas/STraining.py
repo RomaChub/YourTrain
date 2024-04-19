@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from chemas.SExercise import SExercise
+from api.chemas.SExercise import SExercise
 
 
 class STrainingAdd(BaseModel):

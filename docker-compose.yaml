@@ -1,14 +1,18 @@
 version: '3.8'
 
 services:
-  app:
-    container_name: your_train_app
+  api:
+    container_name: your_train_api
     build: ./
     depends_on:
       - db
-    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; uvicorn main:app --host 0.0.0.0 --port 8000'
+    command: [
+        "uvicorn", "api.main:app",
+        "--host", "0.0.0.0",
+        "--port", "8000"
+    ]
     volumes:
-      - ./app:/src/app
+      - ./api:/src/api
     ports:
       - ${APP_HOST_PORT}:8000
     restart: always
@@ -18,11 +22,12 @@ services:
     container_name: your_train_postgres
     image: postgres
     environment:
-      - POSTGRES_DB = database
-      - POSTGRES_USER =${DB_USER}
-      - POSTGRES_PASSWORD =${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
     ports:
       - ${DB_PORT}:5432
     volumes:
-      - .postgres:/var/lib/postgresql/data
+      - ${POSTGRES_VOLUME_PATH}:/var/lib/postgres/data
     restart: always
+    user: "root"

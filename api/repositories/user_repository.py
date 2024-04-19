@@ -1,7 +1,7 @@
-from auth.utils import hash_password
-from database.database import new_session, UserOrm
+from api.auth.utils import hash_password
+from api.database.database import new_session, UserOrm
 from sqlalchemy import select
-from chemas.SUser import SUserAdd, SUser, SUserW
+from api.chemas.SUser import SUserAdd, SUser, SUserW
 
 class UserRepository:
     @classmethod

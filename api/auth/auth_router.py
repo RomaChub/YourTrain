@@ -4,9 +4,9 @@ from fastapi import (
 )
 from pydantic import BaseModel
 
-from auth import utils as auth_utils
-from auth.auth_repository import AuthRepository
-from chemas import SUser
+from api.auth import utils as auth_utils
+from api.auth.auth_repository import AuthRepository
+from api.chemas import SUser
 
 
 class TokenInfo(BaseModel):

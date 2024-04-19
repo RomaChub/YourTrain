@@ -1,9 +1,8 @@
-from chemas.SExercise import SExerciseId
-from database.database import new_session, TrainingOrm, ConnectionExerciseWithTrainingOrm, ExerciseOrm
+from api.database.database import new_session, TrainingOrm, ConnectionExerciseWithTrainingOrm, ExerciseOrm
 
 from sqlalchemy import select, delete
 
-from chemas.STraining import STrainingAdd, STraining, STrainingId, SFullTraining
+from api.chemas.STraining import STrainingAdd, STraining, STrainingId, SFullTraining
 
 
 class TrainingRepository:

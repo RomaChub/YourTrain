@@ -1,7 +1,7 @@
-from database.database import new_session, ConnectionExerciseWithTrainingOrm
+from api.database.database import new_session, ConnectionExerciseWithTrainingOrm
 from sqlalchemy import select
 from typing import List
-from chemas.SPairExerciseTraining import SPairExerciseTraining
+from api.chemas.SPairExerciseTraining import SPairExerciseTraining
 
 
 class ExerciseToTraining:

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from auth.auth_repository import AuthRepository
-from chemas.SUser import SUser
-from repositories.exercise_to_training import ExerciseToTraining
-from chemas.SPairExerciseTraining import SPairExerciseTrainingId, SPairExerciseTraining
+from api.auth.auth_repository import AuthRepository
+from api.chemas.SUser import SUser
+from api.repositories.exercise_to_training import ExerciseToTraining
+from api.chemas.SPairExerciseTraining import SPairExerciseTrainingId, SPairExerciseTraining
 
 router = APIRouter(
     prefix="/your_train",
