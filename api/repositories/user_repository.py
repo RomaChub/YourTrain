@@ -10,6 +10,7 @@ class UserRepository:
         async with new_session() as session:
             user_dict = data.model_dump()
             user = UserOrm(**user_dict)
+
             session.add(user)
             await session.flush()
             await session.commit()

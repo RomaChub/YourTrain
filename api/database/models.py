@@ -34,7 +34,6 @@ ExerciseOrm = Table(
     Column("description", String, nullable=True),
     Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE", onupdate="CASCADE")),
     Column("params", JSON, default=params_json, nullable=True),
-    Column("img", String, nullable=True),
 )
 
 
@@ -55,4 +54,13 @@ CompleteTrainingOrm = Table(
     Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE")),
     Column("time_start", TIMESTAMP, default=False),
     Column("time_end", TIMESTAMP, default=False)
+)
+
+ImageOrm = Table(
+    "images",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("image_path", String, nullable=False),
+    Column("user_id", Integer, ForeignKey("users.id", ondelete="CASCADE", onupdate="CASCADE")),
+    Column("tag", String, nullable=True)
 )

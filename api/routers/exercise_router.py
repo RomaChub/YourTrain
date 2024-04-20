@@ -37,7 +37,7 @@ async def get_one_exercise(exercise_id: int) -> SExercise:
 @router.delete("/exercise/{exercise_id}", response_model=SExerciseId)
 async def delete_exercise(exercise_id: int) -> SExerciseId:
     try:
-        await ExerciseRepository.delete_exercise(exercise_id)
+        await ExerciseRepository.delete(exercise_id)
         return {"id": exercise_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -52,7 +52,7 @@ async def get_exercises() -> list[SExercise]:
 @router.put("/exercise/{exercise_id}", response_model=SExerciseId)
 async def update_exercise(exercise_id: int, ex: Annotated[SExerciseAdd, Depends()]) -> SExerciseId:
     try:
-        success = await ExerciseRepository.update_exercise(exercise_id, ex)
+        success = await ExerciseRepository.update(exercise_id, ex)
         return {"id": exercise_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

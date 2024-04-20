@@ -7,7 +7,6 @@ class SExerciseAdd(BaseModel):
     name: str
     description: Optional[str] = None
     user_id: Optional[int] = None
-    img: Optional[str] = None
     params: Optional[Dict[str, Any]] = None
 
 

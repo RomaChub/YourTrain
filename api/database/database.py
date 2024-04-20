@@ -65,6 +65,14 @@ class ConnectionExerciseWithTrainingOrm(Model):
     user_id: Mapped[int]
 
 
+class ImageOrm(Model):
+    __tablename__ = "images"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    image_path: Mapped[str]
+    user_id: Mapped[int]
+    tag: Mapped[str]
+
 async def create_tables():
     async with engine.begin() as conn:
         await conn.run_sync(Model.metadata.create_all)

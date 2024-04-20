@@ -7,7 +7,7 @@ from api.chemas.STraining import STrainingAdd, STraining, STrainingId, SFullTrai
 
 class TrainingRepository:
     @classmethod
-    async def add_training(cls, data: STrainingAdd, user_id: int) -> STrainingId:
+    async def add_one(cls, data: STrainingAdd, user_id: int) -> STrainingId:
         data.user_id = user_id
         async with new_session() as session:
             training_dict = data.model_dump()
@@ -62,7 +62,7 @@ class TrainingRepository:
             return training_schema
 
     @classmethod
-    async def update_training(cls, training_id: int, name: STrainingAdd):
+    async def update(cls, training_id: int, name: STrainingAdd):
         async with new_session() as session:
             training = await session.get(TrainingOrm, training_id)  # query
             if not training:
@@ -75,7 +75,7 @@ class TrainingRepository:
             return True
 
     @classmethod
-    async def delete_training(cls, training_id: int):
+    async def delete(cls, training_id: int):
         async with new_session() as session:
             query = delete(TrainingOrm).where(TrainingOrm.id == training_id)
             await session.execute(query)

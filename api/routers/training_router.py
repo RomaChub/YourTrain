@@ -19,7 +19,7 @@ async def add_training(
         user: SUser = Depends(AuthRepository.get_current_active_auth_user),
 ) -> STrainingId:
     try:
-        training_id = await TrainingRepository.add_training(training, user.id)
+        training_id = await TrainingRepository.add_one(training, user.id)
         return {"id": training_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -50,7 +50,7 @@ async def get_full_training(training_id: int) -> SFullTraining:
 @router.delete("/training/{training_id}", response_model=STrainingId)
 async def delete_training(training_id: int) -> STrainingId:
     try:
-        await TrainingRepository.delete_training(training_id)
+        await TrainingRepository.delete(training_id)
         return {"id": training_id}
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -68,7 +68,7 @@ async def get_training() -> List[STraining]:
 @router.put("/training/{training_id}", response_model=STrainingId)
 async def update_training(training_id: int, name: Annotated[STrainingAdd, Depends()]) -> STrainingId:
     try:
-        success = await TrainingRepository.update_training(training_id, name)
+        success = await TrainingRepository.update(training_id, name)
         if not success:
             raise HTTPException(status_code=404, detail="Training not found")
         return {"id": training_id}

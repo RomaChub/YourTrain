@@ -36,7 +36,7 @@ class ExerciseRepository:
             return exercise_model
 
     @classmethod
-    async def delete_exercise(cls, exercise_id: int):
+    async def delete(cls, exercise_id: int):
         async with new_session() as session:
             query = delete(ExerciseOrm).where(ExerciseOrm.id == exercise_id)
             await session.execute(query)
@@ -44,7 +44,7 @@ class ExerciseRepository:
             await session.commit()
 
     @classmethod
-    async def update_exercise(cls, ex_id: int, ex: SExerciseAdd):
+    async def update(cls, ex_id: int, ex: SExerciseAdd):
         async with new_session() as session:
             exercise = await session.get(ExerciseOrm, ex_id)
             if not exercise:
