@@ -29,7 +29,7 @@ class ExerciseOrm(Model):
 
 class CompleteTrainingOrm(Model):
     __tablename__ = "complete_trainings"
-    
+
     id = Column(Integer, primary_key=True)
     training_id = Column(Integer)
     user_id = Column(Integer)
@@ -72,6 +72,7 @@ class ImageOrm(Model):
     image_path: Mapped[str]
     user_id: Mapped[int]
     tag: Mapped[str]
+
 
 async def create_tables():
     async with engine.begin() as conn:

@@ -1,10 +1,11 @@
+import os
 import uuid
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, File, UploadFile, Depends, HTTPException, Query
-
+from fastapi.responses import FileResponse
 from api.auth.auth_repository import AuthRepository
-from api.chemas.SImages import SImageAdd
+from api.chemas.SImages import SImageAdd, SImage
 from api.chemas.SUser import SUser
 from api.repositories.images_repository import ImagesRepository
 
@@ -15,7 +16,7 @@ router = APIRouter(
 IMAGEDIR = "api/images/"
 
 
-@router.post('/images_upload/')
+@router.post('/images/upload/')
 async def images_upload(
         file: UploadFile = File(...),
         tag: str = Query("etc", enum=["exercise", "training", "etc"]),
@@ -36,5 +37,18 @@ async def images_upload(
 
         return {"filename": file.filename, "id": image_id}
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Error uploading image")
+        raise HTTPException(status_code=422, detail="Error uploading image")
 
+
+@router.get('/images/')
+async def get_one_image(image_id: int):
+    files = os.listdir(IMAGEDIR)
+    images = await ImagesRepository.get_all()
+    image = f"{IMAGEDIR}{images[image_id].image_path}"
+    return FileResponse(image)
+
+
+@router.get('/images/all/')
+async def get_all_images():
+    images = await ImagesRepository.get_all()
+    return images
