@@ -1,9 +1,7 @@
-from typing import List
-
 from api.chemas.SImages import SImageAdd, SImage
-from api.database.database import new_session, ExerciseOrm
+from api.database.database import new_session
 
-from sqlalchemy import select, delete
+from sqlalchemy import select
 
 from api.database.database import ImageOrm
 

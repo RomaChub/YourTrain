@@ -26,7 +26,8 @@ async def add_training(
 
 
 @router.get("/training/{training_id}", response_model=STraining)
-async def get_one_training(training_id: int) -> STraining:
+async def get_one_training(training_id: int,
+                           user: SUser = Depends(AuthRepository.get_current_active_auth_user)) -> STraining:
     try:
         training_one = await TrainingRepository.get_one(training_id)
         if not training_one:
@@ -37,7 +38,9 @@ async def get_one_training(training_id: int) -> STraining:
 
 
 @router.get("/training/full/{training_id}", response_model=SFullTraining)
-async def get_full_training(training_id: int) -> SFullTraining:
+async def get_full_one_training(
+        training_id: int,
+        user: SUser = Depends(AuthRepository.get_current_active_auth_user)) -> SFullTraining:
     try:
         training = await TrainingRepository.get_training(training_id)
         if not training:
@@ -48,7 +51,9 @@ async def get_full_training(training_id: int) -> SFullTraining:
 
 
 @router.delete("/training/{training_id}", response_model=STrainingId)
-async def delete_training(training_id: int) -> STrainingId:
+async def delete_training(
+        training_id: int,
+        user: SUser = Depends(AuthRepository.get_current_active_auth_user)) -> STrainingId:
     try:
         await TrainingRepository.delete(training_id)
         return {"id": training_id}
@@ -57,7 +62,7 @@ async def delete_training(training_id: int) -> STrainingId:
 
 
 @router.get("/training", response_model=List[STraining])
-async def get_training() -> List[STraining]:
+async def get_trainings(user: SUser = Depends(AuthRepository.get_current_active_auth_user)) -> List[STraining]:
     try:
         training = await TrainingRepository.get_all()
         return training
@@ -66,7 +71,10 @@ async def get_training() -> List[STraining]:
 
 
 @router.put("/training/{training_id}", response_model=STrainingId)
-async def update_training(training_id: int, name: Annotated[STrainingAdd, Depends()]) -> STrainingId:
+async def update_training(training_id: int,
+                          name: Annotated[STrainingAdd, Depends()],
+                          user: SUser = Depends(AuthRepository.get_current_active_auth_user)
+                          ) -> STrainingId:
     try:
         success = await TrainingRepository.update(training_id, name)
         if not success:

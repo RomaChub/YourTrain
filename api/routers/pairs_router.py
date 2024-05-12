@@ -25,7 +25,7 @@ async def add_pair(
 
 
 @router.get("/pair", response_model=list[SPairExerciseTraining])
-async def get_pairs() -> list[SPairExerciseTraining]:
+async def get_pairs( user: SUser = Depends(AuthRepository.get_current_active_auth_user)) -> list[SPairExerciseTraining]:
     try:
         pairs = await ExerciseToTraining.get_all()
         return pairs

@@ -52,7 +52,9 @@ async def end_training(
 
 
 @router.get("/complete-trainings/", response_model=List[SCompleteTraining])
-async def get_all_completed_trainings() -> List[SCompleteTraining]:
+async def get_all_completed_trainings(
+    user: SUser = Depends(AuthRepository.get_current_active_auth_user)
+) -> List[SCompleteTraining]:
     completed_trainings = await CompleteTrainingsRepository.get_all_completed_trainings()
     if not completed_trainings:
         raise HTTPException(status_code=404, detail="No completed trainings found")

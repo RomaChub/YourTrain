@@ -6,11 +6,12 @@ from api.chemas.SUser import SUserAdd, SUser, SUserW
 class UserRepository:
     @classmethod
     async def add_user(cls, data: SUserAdd) -> int:
-        data.hashed_password = await hash_password(data.hashed_password)
+        data.hashed_password = hash_password(data.hashed_password)
         async with new_session() as session:
             user_dict = data.model_dump()
             user = UserOrm(**user_dict)
-
+            user.training_start_flag = False
+            user.is_active = True
             session.add(user)
             await session.flush()
             await session.commit()

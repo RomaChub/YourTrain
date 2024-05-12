@@ -41,14 +41,18 @@ async def images_upload(
 
 
 @router.get('/images/')
-async def get_one_image(image_id: int):
+async def get_one_image(image_path: str, user: SUser = Depends(AuthRepository.get_current_active_auth_user)):
     files = os.listdir(IMAGEDIR)
     images = await ImagesRepository.get_all()
-    image = f"{IMAGEDIR}{images[image_id].image_path}"
+    image = None
+    for i in images:
+        if i.image_path == image_path:
+            image = i
+    image = f"{IMAGEDIR}{image.image_path}"
     return FileResponse(image)
 
 
 @router.get('/images/all/')
-async def get_all_images():
+async def get_all_images( user: SUser = Depends(AuthRepository.get_current_active_auth_user)):
     images = await ImagesRepository.get_all()
     return images

@@ -1,11 +1,9 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class SUserAdd(BaseModel):
     username: str
-    hashed_password: str
-    is_active: bool
-    training_start_flag: bool
+    hashed_password: str = Field('your_password')
 
 
 class SUser(SUserAdd):
@@ -17,7 +15,7 @@ class SUser(SUserAdd):
 class SUserW(BaseModel):
     id: int
     username: str
-    is_active: bool
+
     model_config = ConfigDict(from_attributes=True)
 
 
